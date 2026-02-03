@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💗</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: #ffb6c1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      overflow: hidden;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #fff;
+      margin-bottom: 30px;
+      font-size: clamp(24px, 6vw, 40px);
+    }
+
+    .buttons {
+      position: relative;
+      width: 100%;
+      max-width: 320px;
+      height: 180px;
+    }
+
+    button {
+      padding: 14px 26px;
+      font-size: 18px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      position: absolute;
+      touch-action: manipulation;
+    }
+
+    #yes {
+      left: 30px;
+      top: 80px;
+      background-color: #ff4d6d;
+      color: white;
+    }
+
+    #no {
+      right: 30px;
+      top: 80px;
+      background-color: #999;
+      color: white;
+    }
+
+    /* Emoji fall */
+    .emoji {
+      position: fixed;
+      top: -50px;
+      font-size: 32px;
+      animation: fall 2.5s linear forwards;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    /* Explosion */
+    .boom {
+      position: fixed;
+      font-size: 40px;
+      animation: explode 0.6s ease-out forwards;
+      pointer-events: none;
+    }
+
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(2.5); opacity: 0; }
+    }
+
+    /* SCREEN SHAKE */
+    .shake {
+      animation: shake 0.35s;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0, 0); }
+      20% { transform: translate(-8px, 4px); }
+      40% { transform: translate(8px, -4px); }
+      60% { transform: translate(-6px, -2px); }
+      80% { transform: translate(6px, 2px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .result img {
+      width: 90%;
+      max-width: 320px;
+      border-radius: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>hey vusi benim sevgilim olur musun?</h1>
+
+  <div class="buttons">
+    <button id="yes">EVET 💕</button>
+    <button id="no">HAYIR 😅</button>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+
+    function moveNo() {
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    }
+
+    // HAYIR asla tıklanamaz
+    noBtn.addEventListener("mouseover", moveNo);
+    noBtn.addEventListener("touchstart", moveNo);
+
+    yesBtn.addEventListener("click", () => {
+      // 📳 Vibration
+      if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200, 100, 300]);
+      }
+
+      document.body.innerHTML = `
+        <h1>HELL YEAH 🔥💣</h1>
+        <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" />
+        <h1>Artık sevgiliyiz 😎💘</h1>
+      `;
+
+      // Emoji rain
+      setInterval(createEmoji, 200);
+    });
+
+    function createEmoji() {
+      const emoji = document.createElement("div");
+      emoji.className = "emoji";
+      emoji.innerText = Math.random() > 0.5 ? "💣" : "🔥";
+      emoji.style.left = Math.random() * 100 + "vw";
+      document.body.appendChild(emoji);
+
+      if (emoji.innerText === "💣") {
+        setTimeout(() => explode(emoji), 1800);
+      }
+
+      setTimeout(() => emoji.remove(), 2600);
+    }
+
+    function explode(emoji) {
+      const boom = document.createElement("div");
+      boom.className = "boom";
+      boom.innerText = "💥";
+      boom.style.left = emoji.style.left;
+      boom.style.top = "70vh";
+      document.body.appendChild(boom);
+
+      // 📳 small vibrate + screen shake
+      if (navigator.vibrate) navigator.vibrate(150);
+      document.body.classList.add("shake");
+      setTimeout(() => document.body.classList.remove("shake"), 350);
+
+      setTimeout(() => boom.remove(), 600);
+    }
+  </script>
+
+</body>
+</html>
